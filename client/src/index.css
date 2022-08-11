@@ -144,7 +144,9 @@ body {
 }
 
 .cardBoxButton {
-    margin-left: 20px;
+    margin-left: 15px;
+    position: relative;
+    bottom: 55px;
 }
 
 .card {
@@ -169,4 +171,9 @@ body {
 
 .modalEditCardName {
     margin-top: 20px;
+}
+
+.cardDeleteButton:hover {
+    background-color: rgb(182, 43, 43);
+    border-color: rgb(124, 23, 23);
 }

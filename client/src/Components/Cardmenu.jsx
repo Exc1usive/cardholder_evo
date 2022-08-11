@@ -185,7 +185,7 @@ export default function Cardmenu(props) {
                     </div>
                     </div>
                     <div className='cardBoxButton'>
-                        <button className='btn btn-dark' onClick={() => handleDeleteClick(card._id)}>Видалити</button>
+                        <button className='btn btn-dark cardDeleteButton' onClick={() => handleDeleteClick(card._id)}>Видалити</button>
                     </div>
                 </div>
             )
