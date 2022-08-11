@@ -1,0 +1,172 @@
+body {
+    background: white;
+}
+
+.sideMenu {
+    font-size: larger;
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    width: 25%;
+    height: 100%;
+    border-right: 3px solid black;
+    box-shadow: 5px 0px 15px black;
+    background: linear-gradient(to top left, rgba(9, 186, 218, 0.973), rgba(241, 103, 10, 0.979));
+}
+
+.sideHr {
+    border: 3px solid black;
+}
+
+.balance div {
+    margin: 20px;
+}
+
+.cashCurrency {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px 0 0;
+}
+
+.cardMenu {
+    min-height: 977px;
+    margin-left: 25%;
+    background: linear-gradient(to top right, rgba(9, 186, 218, 0.973), rgba(241, 103, 10, 0.979));
+}
+
+.addForm * {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.smallInputGroup {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.smallInput {
+    width: 70px;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 25%;
+    width: 30%;
+}
+
+.addFormButton {
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttonGroup button {
+    margin-top: 30px;
+    box-shadow: 5px 0px 15px black;
+}
+
+.formButton {
+    width: 100px;
+}
+
+.cardBox {
+    margin-top: 25px;
+    margin-left: 25%;
+    width: 30%;
+    border: solid 3px #6e7491;
+    border-radius: 0.6rem;
+    box-shadow: 5px 0px 15px black;
+}
+
+.card {
+    padding-left: 40px;
+}
+
+.card * {
+    margin-bottom: 5px;
+}
+
+.card div {
+    margin-bottom: 0;
+}
+
+.cardPaymentSystemImage {
+    top: 10px;
+    width: 50px;
+    position: absolute;
+    right: 20px;
+}
+
+.cardPaymentSystemLabel {
+    width: 150px;
+    text-align: right;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+.cardType {
+    text-align: center;
+    width: 50px;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+}
+
+.cardName {
+    position: relative;
+    left: -20px;
+    top: -10px;
+    margin-top: 20px;
+    font-size: x-large;
+}
+
+.panBox {
+    display: flex;
+    align-items: center;
+}
+
+.cardPan {
+    margin: 0;
+}
+
+.copyPan {
+    margin: 0 0 0 20px;
+}
+
+.cardDateExpire {
+    margin-bottom: 20px;
+}
+
+.cardList {
+    display: flex;
+    align-items: center;
+}
+
+.cardBoxButton {
+    margin-left: 20px;
+}
+
+.card {
+    font-family: 'Poppins', sans-serif;
+    font-size: large;
+    background: rgb(226, 226, 226);
+}
+
+.modalInput {
+    display: flex;
+}
+
+.modalWindow {
+    text-align: center;
+}
+
+.modalButtonGroup {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.modalEditCardName {
+    margin-top: 20px;
+}
