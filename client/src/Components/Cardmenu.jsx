@@ -73,14 +73,14 @@ export default function Cardmenu(props) {
         return (
         <div className="buttonGroup">
             <button 
-                className="btn btn-secondary"
+                className="btn btn-secondary cardMenuButton"
                 onClick={handleOpenAddWallet}
             >
                 Додати карту
             </button>
 
             <button 
-                className="btn btn-secondary"
+                className="btn btn-secondary cardMenuButton"
                 onClick={handleOpenAddCash}
             >
                 Додати готівку

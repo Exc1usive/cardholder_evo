@@ -177,3 +177,13 @@ body {
     background-color: rgb(182, 43, 43);
     border-color: rgb(124, 23, 23);
 }
+
+.cardMenuButton {
+    background-color: rgb(12, 141, 12);
+    border-color: rgb(13, 145, 13);
+}
+
+.cardMenuButton:hover {
+    background-color: rgb(13, 145, 13);
+    border-color: rgb(11, 121, 11);
+}
