@@ -19,14 +19,15 @@ const style = {
     color: 'white'
   };
 
-const listCurrency = ['UAH', 'USD', 'EUR']
+
 
 export default function Cardmenu(props) {
 
     const {
         updateForm,
         setUpdateForm,
-        id
+        id,
+        listCurrency
     } = props
 
     // state for open and close modal ADD WALLET window

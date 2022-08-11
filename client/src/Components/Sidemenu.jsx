@@ -24,7 +24,8 @@ export default function Sidemenu(props) {
   const {
     updateForm,
     setUpdateForm,
-    id
+    id,
+    listCurrency
   } = props
   
   const [amount, setAmount] = useState(0);
@@ -58,8 +59,6 @@ export default function Sidemenu(props) {
   const [openEditCard, setOpenEditCard] = useState(false);
   const handleOpenEditCard = () => setOpenEditCard(true);
   const handleCloseEditCard = () => setOpenEditCard(false);
-
-  let listCurrency = ['UAH', 'USD', 'EUR']
 
   useEffect(() => {
     axios
