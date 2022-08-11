@@ -10,7 +10,7 @@ body {
     height: 100%;
     border-right: 3px solid black;
     box-shadow: 5px 0px 15px black;
-    background: linear-gradient(to top left, rgba(9, 186, 218, 0.973), rgba(241, 103, 10, 0.979));
+    background: linear-gradient(to top left, rgb(81, 229, 255), rgb(255, 151, 82));
 }
 
 .sideHr {
@@ -30,7 +30,7 @@ body {
 .cardMenu {
     min-height: 977px;
     margin-left: 25%;
-    background: linear-gradient(to top right, rgba(9, 186, 218, 0.973), rgba(241, 103, 10, 0.979));
+    background: linear-gradient(to top right, rgb(81, 229, 255), rgb(255, 151, 82));
 }
 
 .addForm * {
