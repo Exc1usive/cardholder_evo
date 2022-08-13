@@ -1,23 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 import ModalEditCash from './ModalEditCash';
 import ModalEditCard from './ModalEditCard';
 import axios from 'axios'
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  borderRadius: "25px",
-  boxShadow: 24,
-  p: 4,
-  color: 'white'
-};
 
 export default function Sidemenu(props) {
 
@@ -48,7 +32,6 @@ export default function Sidemenu(props) {
       amount: 0,
   }]
   });
-
   
   // state for open and close modal EDIT CASH window
   const [openEditCash, setOpenEditCash] = useState(false);
@@ -62,7 +45,7 @@ export default function Sidemenu(props) {
 
   useEffect(() => {
     axios
-      .get(`/api/wallets/${id}`)
+      .get(`/api/wallet/${id}`)
       .then(res => setWallet(res.data))
       .catch(error => console.log(error))
   }, [id, updateForm]);
@@ -70,7 +53,7 @@ export default function Sidemenu(props) {
   function cashList() {
     return wallet.cash.map((cash, i) => {
       return (
-        <div key={i} className='cashCurrency'>
+        <div key={i} className='sideRow'>
           <li key={i}> {cash.amount} {cash.currencyName} </li>
           <button 
             key={cash._id}
@@ -93,8 +76,8 @@ export default function Sidemenu(props) {
   function cardList() {
     return wallet.cards.map((card, i) => {
       return (
-        <div key={i} className='cashCurrency'>
-          <li key={i}>{card.name} - {card.amount} {card.currencyName} </li>
+        <div key={i} className='sideRow'>
+          <li key={i}>{card.name}: {card.amount} {card.currencyName} </li>
           <button 
             key={card._id}
             name={i}
@@ -138,7 +121,7 @@ export default function Sidemenu(props) {
       return null;
     })
     return balance.map((currency, i) => (
-      <div key={i}>
+      <div key={i} className='sideRow'>
         <li>
           {currency.amount} {currency.currencyName} 
         </li>
@@ -148,62 +131,52 @@ export default function Sidemenu(props) {
 
 
   return (
+    
     <div className='sideMenu'>
       <div className='balance'>
-        <div className='cardBalance'>
-          Баланс
-            {balanceList()}
-        </div>
+          <div className='sideRow'>
+            Баланс
+          </div>
+          {balanceList()}
         <hr className='sideHr'/>
-        <div className='cashBalance'>
+          <div className='sideRow'>
           Готівка
+          </div>
           {cashList()}
-        </div>
         <hr className='sideHr'/>
-        <div className='cashBalance'>
+          <div className='sideRow'>
           Картки
+          </div>
           {cardList()}
-        </div>
         <hr className='sideHr'/>
       </div>
 
-      <Modal
-        open={openEditCash}
-        onClose={handleCloseEditCash}
-      >
-        <Box sx={style}>
-          <ModalEditCash 
-            listCurrency={listCurrency}
-            walletId={walletId}
-            selectedCurrency={currencyName}
-            onChangeCurrency={e => setCurrencyName(e.target.value)}
-            amount={amount}
-            setAmount={e => setAmount(e.target.value)}
-            handleCloseEditCash={handleCloseEditCash}
-            setUpdateForm={setUpdateForm}
-          />
-        </Box>
-      </Modal>
+      <ModalEditCash 
+        listCurrency={listCurrency}
+        cashId={walletId}
+        selectedCurrency={currencyName}
+        onChangeCurrency={e => setCurrencyName(e.target.value)}
+        amount={amount}
+        setAmount={e => setAmount(e.target.value)}
+        handleCloseEditCash={handleCloseEditCash}
+        setUpdateForm={setUpdateForm}
+        openEditCash={openEditCash}
+      />
 
-      <Modal
-        open={openEditCard}
-        onClose={handleCloseEditCard}
-      >
-        <Box sx={style}>
-          <ModalEditCard 
-            listCurrency={listCurrency}
-            walletId={walletId}
-            selectedCurrency={currencyName}
-            onChangeCurrency={e => setCurrencyName(e.target.value)}
-            cardName={cardName}
-            onChangeName={e => setCardName(e.target.value)}
-            amount={amount}
-            setAmount={e => setAmount(e.target.value)}
-            handleCloseEditCard={handleCloseEditCard}
-            setUpdateForm={setUpdateForm}
-          />
-        </Box>
-      </Modal>
+      <ModalEditCard 
+        listCurrency={listCurrency}
+        cardId={walletId}
+        selectedCurrency={currencyName}
+        onChangeCurrency={e => setCurrencyName(e.target.value)}
+        cardName={cardName}
+        onChangeName={e => setCardName(e.target.value)}
+        amount={amount}
+        setAmount={e => setAmount(e.target.value)}
+        handleCloseEditCard={handleCloseEditCard}
+        setUpdateForm={setUpdateForm}
+        openEditCard={openEditCard}
+      />
+
 
     </div>
   )

@@ -1,25 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 import axios from 'axios'
-import ModalAddWallet from './ModalAddWallet';
+import ModalAddCard from './ModalAddCard';
 import ModalAddCash from './ModalAddCash';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    borderRadius: "25px",
-    p: 4,
-    color: 'white'
-  };
-
-
 
 export default function Cardmenu(props) {
 
@@ -29,16 +11,6 @@ export default function Cardmenu(props) {
         id,
         listCurrency
     } = props
-
-    // state for open and close modal ADD WALLET window
-    const [openAddWallet, setOpenAddWallet] = useState(false);
-    const handleOpenAddWallet = () => setOpenAddWallet(true);
-    const handleCloseAddWallet = () => setOpenAddWallet(false);
-
-    // state for open and close modal ADD CASH window
-    const [openAddCash, setOpenAddCash] = useState(false);
-    const handleOpenAddCash = () => setOpenAddCash(true);
-    const handleCloseAddCash = () => setOpenAddCash(false);
 
     const [cards, setCards] = useState([{
         pan: "",
@@ -55,7 +27,7 @@ export default function Cardmenu(props) {
 
     useEffect(() => {
         axios
-            .get(`/api/wallets/${id}`)
+            .get(`/api/wallet/${id}`)
             .then((res) => {
                 setCards(res.data.cards)
                 res.data.cards.map((card, i) => {
@@ -69,122 +41,117 @@ export default function Cardmenu(props) {
             .catch(error => console.log(error)) 
       }, [id, updateForm]);
 
-    const ButtonGroup = () => {
+    const ModalAddCardButton = () => {
+        // state for open and close modal ADD WALLET window
+        const [openAddCard, setOpenAddCard] = useState(false);
+        const handleOpenAddCard = () => setOpenAddCard(true);
+        const handleCloseAddCard = () => setOpenAddCard(false);
         return (
-        <div className="buttonGroup">
+            <>
             <button 
                 className="btn btn-secondary cardMenuButton"
-                onClick={handleOpenAddWallet}
+                onClick={handleOpenAddCard}
             >
                 Додати карту
             </button>
 
+            <ModalAddCard 
+                handleCloseAddCard={handleCloseAddCard}
+                listCurrency={listCurrency}
+                setUpdateForm={setUpdateForm}
+                openAddCard={openAddCard}
+            />
+            </>
+
+        )
+    }
+
+    const ModalAddCashButton = () => {
+        // state for open and close modal ADD CASH window
+        const [openAddCash, setOpenAddCash] = useState(false);
+        const handleOpenAddCash = () => setOpenAddCash(true);
+        const handleCloseAddCash = () => setOpenAddCash(false);
+
+        return (
+            <>
             <button 
-                className="btn btn-secondary cardMenuButton"
-                onClick={handleOpenAddCash}
+            className="btn btn-secondary cardMenuButton"
+            onClick={handleOpenAddCash}
             >
                 Додати готівку
             </button>
-        </div>
+
+            <ModalAddCash 
+                id={id}
+                handleCloseAddCash={handleCloseAddCash}
+                listCurrency={listCurrency}
+                setUpdateForm={setUpdateForm}
+                openAddCash={openAddCash}
+            />
+            </>
         )
-    }
-
-    const ModalGroup = () => {
-        return (
-        <div className='modalGroup'>
-            <Modal
-                open={openAddWallet}
-                onClose={handleCloseAddWallet}
-            >
-                <Box sx={style}>
-                    <ModalAddWallet 
-                        handleCloseAddWallet={handleCloseAddWallet}
-                        listCurrency={listCurrency}
-                        setUpdateForm={setUpdateForm}
-                    />
-                </Box>
-            </Modal>
-
-            <Modal
-                open={openAddCash}
-                onClose={handleCloseAddCash}
-            >
-                <Box sx={style}>
-                    <ModalAddCash 
-                        id={id}
-                        handleCloseAddCash={handleCloseAddCash}
-                        listCurrency={listCurrency}
-                        setUpdateForm={setUpdateForm}
-                    />
-                </Box>
-            </Modal>
-        </div>
-        )
-    }
-
-
-    function handlePanClick(i) {
-        setCards((prev) => {
-            if (prev[i].pan === prev[i].masked_pan) {
-                prev[i].pan = prev[i].original_pan
-            } else {
-                prev[i].pan = prev[i].masked_pan
-            }
-            setCards(prev)
-        })
-    }
-
-    function handleCopyClick(i) {
-        navigator.clipboard.writeText(cards[i].original_pan);
-    }
-
-    function checkImageExist(card_index) {
-        let card_payment_system = cards[card_index].payment_system
-        let imageExist = false
-        
-        switch (card_payment_system) {
-            case "mastercard":
-            case "visa":
-                imageExist = true
-                break;
-            default:
-                break;
-        }
-
-        return imageExist
-    }
-
-    function handleDeleteClick(id) {
-        axios
-      .delete(`/api/wallets/delete/${id}`)
-      .then(res => {
-        console.log(res);
-        setUpdateForm(prev => !prev)
-      })
-      .catch(err => console.log(err))
     }
 
     const CardList = () => {
+        function handlePanClick(i) {
+            setCards((prev) => {
+                if (prev[i].pan === prev[i].masked_pan) {
+                    prev[i].pan = prev[i].original_pan
+                } else {
+                    prev[i].pan = prev[i].masked_pan
+                }
+                setCards(prev)
+            })
+        }
+    
+        function handleCopyClick(i) {
+            navigator.clipboard.writeText(cards[i].original_pan);
+        }
+    
+        function checkImageExist(card_index) {
+            let card_payment_system = cards[card_index].payment_system
+            let imageExist = false
+            
+            switch (card_payment_system) {
+                case "mastercard":
+                case "visa":
+                    imageExist = true
+                    break;
+                default:
+                    break;
+            }
+    
+            return imageExist
+        }
+    
+        function handleDeleteClick(id) {
+            axios
+          .delete(`/api/wallet/card/${id}`)
+          .then(res => {
+            console.log(res);
+            setUpdateForm(prev => !prev)
+          })
+          .catch(err => console.log(err))
+        }
+
         return cards.map((card, i) => {
             return (
                 <div className='cardList' key={i}>
                     <div className='cardBox' >
-                    <div className='card'>
-                    <div className='typeBox'>
-                        {checkImageExist(i) ? <img className='cardPaymentSystemImage' src={`./${card.payment_system}.png`} alt='paymentSystem'></img>
-                                            : <label className='cardPaymentSystemLabel'>{card.payment_system}</label>}
-                        <label className='cardType'>{card.card_type}</label>
+                        <div className='card'>
+                            {checkImageExist(i) ? <img className='cardPaymentSystemImage' src={`./${card.payment_system}.png`} alt='paymentSystem'></img>
+                                                : <label className='cardPaymentSystemLabel'>{card.payment_system}</label>}
+                            <label className='cardType'>{card.card_type}</label>
+                            <p className='cardName'>{card.name}</p>
+                            <p className='cardAmount'>{card.amount} {card.currencyName}</p>
+                            <div className='panBox'>
+                                <p id='cardId' className='cardPan' onClick={() => handlePanClick(i)}>{card.pan}</p>
+                                <button className='copyPan btn btn-primary-outline' onClick={() => handleCopyClick(i)}>copy</button>
+                            </div>
+                            <p className='cardDateExpire'>{card.expire_date}</p>
+                        </div>
                     </div>
-                        <p className='cardName'>{card.name}</p>
-                        <p className='cardAmount'>{card.amount} {card.currencyName}</p>
-                    <div className='panBox'>
-                        <p id='cardId' className='cardPan' onClick={() => handlePanClick(i)}>{card.pan}</p>
-                        <button className='copyPan btn btn-primary-outline' onClick={() => handleCopyClick(i)}>copy</button>
-                    </div>
-                        <p className='cardDateExpire'>{card.expire_date}</p>
-                    </div>
-                    </div>
-                    <div className='cardBoxButton'>
+                    <div>
                         <button className='btn btn-dark cardDeleteButton' onClick={() => handleDeleteClick(card._id)}>Видалити</button>
                     </div>
                 </div>
@@ -194,12 +161,16 @@ export default function Cardmenu(props) {
 
   return (
     <div className='cardMenu'>
-        
-        {<ButtonGroup />}
+
+        <div className='buttonGroup'>
+
+        {<ModalAddCardButton />}
+        {<ModalAddCashButton />}
+
+        </div>
 
         {<CardList />}
 
-        {<ModalGroup />}
 
     </div>
   )

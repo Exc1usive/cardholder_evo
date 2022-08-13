@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
 export default function ModalAddCash(props) {
     const {
         listCurrency,
+        openAddCash,
         handleCloseAddCash,
         setUpdateForm,
         id
@@ -24,7 +27,7 @@ export default function ModalAddCash(props) {
 
     function onSubmit() {
         axios
-            .post("/api/wallets/cash/add", form)
+            .post("/api/wallet/cash/add", form)
             .then((res) => {
                 console.log(res);
                 handleCloseAddCash();
@@ -35,37 +38,44 @@ export default function ModalAddCash(props) {
             })
     }
     
-    
-      return (
-        <div className='modalWindow'>
-          <div className='smallInputGroup'> 
-            <div>
-              <label>Сумма</label>
-              <input type='number' className='input form-control smallInput' value={form.amount} onChange={(e) => updateForm({amount: e.target.value})}/>
-            </div> 
-            <div>
-              <label>Валюта</label>
-              <select value={form.currency} onChange={(e) => updateForm({currencyName: e.target.value})} className="form-control smallInput">
-                {listCurrency.map((currency, index) => (
-                <option key={index} value={currency}>{currency}</option>
-                ))}
-              </select>
-            </div>      
-          </div>
-          <div className='modalButtonGroup'>
-            <button 
-              onClick={onSubmit}
-              className="btn btn-primary formButton"
-            >
-              Зберегти
-            </button>
-            <button 
-              onClick={handleCloseAddCash}
-              className="btn btn-primary formButton"
-            >
-              Скасувати
-            </button>
+  return (
+      <Modal
+        open={openAddCash}
+        onClose={handleCloseAddCash}
+    >
+        <Box className='modalBox'>
+          <div className='modalWindow'>
+            <div className='modalSmallInputGroup'> 
+              <div>
+                <label>Сумма</label>
+                <input type='number' className='input form-control smallInput' value={form.amount} onChange={(e) => updateForm({amount: e.target.value})}/>
+              </div> 
+              <div>
+                <label>Валюта</label>
+                <select value={form.currency} onChange={(e) => updateForm({currencyName: e.target.value})} className="form-control smallInput">
+                  {listCurrency.map((currency, index) => (
+                  <option key={index} value={currency}>{currency}</option>
+                  ))}
+                </select>
+              </div>      
             </div>
-        </div>
-      )
+            <div className='modalButtonGroup'>
+              <button 
+                onClick={onSubmit}
+                className="btn btn-primary modalButton"
+              >
+                Зберегти
+              </button>
+              <button 
+                onClick={handleCloseAddCash}
+                className="btn btn-primary modalButton"
+              >
+                Скасувати
+              </button>
+              </div>
+          </div>
+        </Box>
+    </Modal>
+        
+  )
 }

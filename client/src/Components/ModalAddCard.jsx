@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import InputMask from 'react-input-mask'
 import Alert from '@mui/material/Alert';
 import axios from 'axios'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
-export default function ModalAddWallet(props) {
+export default function ModalAddCard(props) {
 
     const { 
-        handleCloseAddWallet,
+        handleCloseAddCard,
         listCurrency,
-        setUpdateForm
+        setUpdateForm,
+        openAddCard
     } = props
 
     const [cardValidationError, setCardValidationError] = useState(false)
@@ -20,13 +23,13 @@ export default function ModalAddWallet(props) {
     const onSubmit = data => {
         if (cardValidationError === true) return null;
         axios
-            .post("/api/wallets/cards/add", {...data})
+            .post("/api/wallet/card/add", {...data})
             .then((res) => {
                 console.log(res.data);
                 if (res.data === "Card already exist")
                     setCardExists(true)
                 if (res.data === "Card added") {
-                    handleCloseAddWallet();
+                    handleCloseAddCard();
                     setUpdateForm((prev) => !prev)
                 }
             })
@@ -100,6 +103,11 @@ export default function ModalAddWallet(props) {
 
   return (
     <>
+    <Modal
+    open={openAddCard}
+    onClose={handleCloseAddCard}
+    >
+    <Box className='modalBox'>
     {
     cardValidationError ? <Alert severity="error">Такої картки не існує в світі, спробуйте іншу</Alert> :
     errors.pan ? <Alert severity="error">{errors.pan.message}</Alert> :
@@ -112,7 +120,7 @@ export default function ModalAddWallet(props) {
 
     <form 
         onSubmit={handleSubmit(onSubmit)}
-        className="addForm"
+        className="modalWindow"
     >  
 
         <div className='form-group'>
@@ -132,7 +140,7 @@ export default function ModalAddWallet(props) {
             required/>
         </div>
 
-        <div className='smallInputGroup'>
+        <div className='modalSmallInputGroup'>
             <div>
                 <label>Строк дії</label>
                 <InputMask 
@@ -143,7 +151,7 @@ export default function ModalAddWallet(props) {
                         message: "Строк дії введено невірно"
                     }
                 })} 
-                className="form-control smallInput" 
+                className="form-control modalSmallInput" 
                 mask="99/99" 
                 placeholder="00/00" 
                 required/>
@@ -159,7 +167,7 @@ export default function ModalAddWallet(props) {
                     }
 
                 })} 
-                className="form-control smallInput" 
+                className="form-control modalSmallInput" 
                 mask="999" 
                 placeholder="000" 
                 required/>
@@ -188,7 +196,7 @@ export default function ModalAddWallet(props) {
             />
         </div>
 
-        <div className='smallInputGroup'>
+        <div className='modalSmallInputGroup'>
             <div>
                 <label>Сумма</label>
                 <input {...register("amount", {
@@ -198,13 +206,13 @@ export default function ModalAddWallet(props) {
                 }
                 })} 
                 placeholder="0"
-                className='input form-control smallInput'
+                className='input form-control'
                 onKeyPress={(event) => {if (!/[0-9]/.test(event.key)) event.preventDefault()}}
                 />
             </div>
             <div>
                 <label>Валюта</label>
-                <select {...register("currencyName")} className="form-control smallInput">
+                <select {...register("currencyName")} className="form-control">
                     {listCurrency.map((currency, index) => (
                     <option key={index} value={currency}>{currency}</option>
                     ))}
@@ -212,12 +220,14 @@ export default function ModalAddWallet(props) {
             </div>
         </div>
 
-        <div className='addFormButton'>
-            <input type="submit" value="Додати" className="btn btn-primary formButton"/>
-            <input type="button" value="Закрити" onClick={handleCloseAddWallet} className="btn btn-primary formButton"/>
+        <div className='modalButtonGroup'>
+            <input type="submit" value="Додати" className="btn btn-primary modalButton"/>
+            <input type="button" value="Закрити" onClick={handleCloseAddCard} className="btn btn-primary modalButton"/>
         </div>
 
     </form>
+    </Box>
+    </Modal>
     </>
   )
 }

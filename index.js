@@ -39,17 +39,14 @@ async function getExtraCardDate(pan) {
 }
 
 // GET wallet via id
-app.get("/api/wallets/:id", (req, res) => {
+app.get("/api/wallet/:id", (req, res) => {
     Wallet.findOne({_id: req.params.id})
         .then((wallet) => res.json(wallet))
         .catch((err) => res.status(400).json(`Error: ${err}`))
 })
 
 // POST new cards
-app.post("/api/wallets/cards/add", (req, res) => {
-    // let test = new Wallet({ cards:[ { ...req.body } ] })
-    // test.save()
-
+app.post("/api/wallet/card/add", (req, res) => {
     Wallet.exists({cards: {$elemMatch: {pan: req.body.pan}}}, async (err, card) => {
         if (card) 
             return res.json("Card already exist")
@@ -81,7 +78,7 @@ app.post("/api/wallets/cards/add", (req, res) => {
 })
 
 // POST new cash
-app.post("/api/wallets/cash/add", (req, res) => {
+app.post("/api/wallet/cash/add", (req, res) => {
     const newCash = { 
         amount: req.body.amount,
         currencyName: req.body.currencyName
@@ -95,16 +92,24 @@ app.post("/api/wallets/cash/add", (req, res) => {
 
 })
 
-// DELETE wallet
-app.delete("/api/wallets/delete/:id", (req, res) => {
+// DELETE card via id
+app.delete("/api/wallet/card/:id", (req, res) => {
     Wallet.updateOne({}, 
         {
-            $pull: { cash: {_id: req.params.id}, cards: {_id: req.params.id} }
+            $pull: { cards: {_id: req.params.id} }
+        }, (err, result) => res.json("card deleted") )
+})
+
+// DELETE cash via id
+app.delete("/api/wallet/cash/:id", (req, res) => {
+    Wallet.updateOne({}, 
+        {
+            $pull: { cash: {_id: req.params.id} }
         }, (err, result) => res.json("card deleted") )
 })
 
 // PUT (edit) cash via id
-app.put("/api/wallets/cash/edit", (req, res) => {
+app.put("/api/wallet/cash/edit", (req, res) => {
     Wallet.updateOne(
         { 'cash._id': req.body.id },
         {$set: { 'cash.$': { ...req.body } } },
@@ -114,7 +119,7 @@ app.put("/api/wallets/cash/edit", (req, res) => {
 })
 
 // PUT (edit) cards via id
-app.put("/api/wallets/cards/edit", (req, res) => {  
+app.put("/api/wallet/card/edit", (req, res) => {  
     Wallet.findOne(
         { "cards._id": req.body.id },
         (err, wallet) => {

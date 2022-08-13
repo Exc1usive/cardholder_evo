@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
 export default function ModalEditCash(props) {
   
@@ -10,18 +12,19 @@ export default function ModalEditCash(props) {
     listCurrency,
     handleCloseEditCash,
     amount,
-    walletId,
-    setUpdateForm
+    cashId,
+    setUpdateForm,
+    openEditCash
   } = props
 
   function onSubmit() {
     let editedCash = {
       currencyName: selectedCurrency,
       amount: amount,
-      id: walletId,
+      id: cashId,
     }
     axios
-      .put("/api/wallets/cash/edit", editedCash)
+      .put("/api/wallet/cash/edit", editedCash)
         .then(res => {
           console.log(res);
           setUpdateForm(prev => !prev)
@@ -31,9 +34,8 @@ export default function ModalEditCash(props) {
   }
 
   function onDelete() {
-    console.log(walletId);
     axios
-      .delete(`/api/wallets/delete/${walletId}`)
+      .delete(`/api/wallet/cash/${cashId}`)
       .then(res => {
         console.log(res)
         setUpdateForm(prev => !prev)
@@ -43,8 +45,13 @@ export default function ModalEditCash(props) {
   }
 
   return (
+    <Modal
+    open={openEditCash}
+    onClose={handleCloseEditCash}
+  >
+    <Box className='modalBox'>
     <div className='modalWindow'>
-      <div className='smallInputGroup'>   
+      <div className='modalSmallInputGroup'>   
         <div>
           <label>Сумма</label>
           <input type='number' className='input form-control' value={amount} onChange={setAmount}/>
@@ -61,23 +68,25 @@ export default function ModalEditCash(props) {
       <div className='modalButtonGroup'>
         <button 
           onClick={onSubmit}
-          className="btn btn-primary formButton"
+          className="btn btn-primary modalButton"
         >
           Зберегти
         </button>
         <button 
           onClick={handleCloseEditCash}
-          className="btn btn-primary formButton"
+          className="btn btn-primary modalButton"
         >
           Скасувати
         </button>
         <button 
           onClick={onDelete}
-          className="btn btn-primary formButton"
+          className="btn btn-primary modalButton"
         >
           Видалити
         </button>
       </div>
     </div>
+    </Box>
+  </Modal>
   )
 }

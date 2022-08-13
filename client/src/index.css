@@ -1,5 +1,15 @@
-body {
-    background: white;
+.modalBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: rgb(18, 18, 18);
+    border: 2px solid #000;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;    padding: 32px;
+    color: white
+    
 }
 
 .sideMenu {
@@ -13,39 +23,20 @@ body {
     background: linear-gradient(to top left, rgb(81, 229, 255), rgb(255, 151, 82));
 }
 
-.sideHr {
-    border: 3px solid black;
-}
-
-.balance div {
-    margin: 20px;
-}
-
-.cashCurrency {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 20px 0 0;
-}
-
 .cardMenu {
     min-height: 977px;
     margin-left: 25%;
     background: linear-gradient(to top right, rgb(81, 229, 255), rgb(255, 151, 82));
 }
 
-.addForm * {
-    margin-top: 1rem;
-    text-align: center;
+.sideHr {
+    border: 3px solid black;
 }
 
-.smallInputGroup {
+.sideRow {
     display: flex;
-    justify-content: space-around;
-
-}
-
-.smallInput {
-    width: 70px;
+    justify-content: space-between;
+    margin: 20px 40px 20px 40px;
 }
 
 .buttonGroup {
@@ -55,18 +46,24 @@ body {
     width: 30%;
 }
 
-.addFormButton {
-    display: flex;
-    justify-content: space-around;
-}
-
 .buttonGroup button {
     margin-top: 30px;
     box-shadow: 5px 0px 15px black;
 }
 
-.formButton {
-    width: 100px;
+.cardMenuButton {
+    background-color: rgb(12, 141, 12);
+    border-color: rgb(13, 145, 13);
+}
+
+.cardMenuButton:hover {
+    background-color: rgb(13, 145, 13);
+    border-color: rgb(11, 121, 11);
+}
+
+.cardList {
+    display: flex;
+    align-items: center;
 }
 
 .cardBox {
@@ -79,6 +76,9 @@ body {
 }
 
 .card {
+    font-family: 'Poppins', sans-serif;
+    font-size: large;
+    background: rgb(226, 226, 226);
     padding-left: 40px;
 }
 
@@ -138,39 +138,10 @@ body {
     margin-bottom: 20px;
 }
 
-.cardList {
-    display: flex;
-    align-items: center;
-}
-
-.cardBoxButton {
+.cardDeleteButton {
     margin-left: 15px;
     position: relative;
     bottom: 55px;
-}
-
-.card {
-    font-family: 'Poppins', sans-serif;
-    font-size: large;
-    background: rgb(226, 226, 226);
-}
-
-.modalInput {
-    display: flex;
-}
-
-.modalWindow {
-    text-align: center;
-}
-
-.modalButtonGroup {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-}
-
-.modalEditCardName {
-    margin-top: 20px;
 }
 
 .cardDeleteButton:hover {
@@ -178,12 +149,26 @@ body {
     border-color: rgb(124, 23, 23);
 }
 
-.cardMenuButton {
-    background-color: rgb(12, 141, 12);
-    border-color: rgb(13, 145, 13);
+.modalWindow * {
+    margin-top: 8px;
+    text-align: center;
 }
 
-.cardMenuButton:hover {
-    background-color: rgb(13, 145, 13);
-    border-color: rgb(11, 121, 11);
+.modalSmallInputGroup {
+    display: flex;
+    justify-content: space-around;
+}
+
+.modalSmallInput {
+    width: 70px;
+}
+
+.modalButton {
+    width: 100px;
+}
+
+.modalButtonGroup {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
 }

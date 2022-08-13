@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios'
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
 export default function ModalEditCard(props) {
   
@@ -10,10 +12,11 @@ export default function ModalEditCard(props) {
     listCurrency,
     handleCloseEditCard,
     amount,
-    walletId,
+    cardId,
     setUpdateForm,
     cardName,
-    onChangeName
+    onChangeName,
+    openEditCard,
   } = props
 
   function onSubmit() {
@@ -21,10 +24,10 @@ export default function ModalEditCard(props) {
       currencyName: selectedCurrency,
       amount: amount,
       name: cardName,
-      id: walletId,
+      id: cardId,
     }
     axios
-      .put("/api/wallets/cards/edit", editedCard)
+      .put("/api/wallet/card/edit", editedCard)
         .then(res => {
           console.log(res);
           setUpdateForm(prev => !prev)
@@ -34,9 +37,8 @@ export default function ModalEditCard(props) {
   }
 
   function onDelete() {
-    console.log(walletId);
     axios
-      .delete(`/api/wallets/delete/${walletId}`)
+      .delete(`/api/wallet/card/${cardId}`)
       .then(res => {
         console.log(res);
         setUpdateForm(prev => !prev)
@@ -46,8 +48,13 @@ export default function ModalEditCard(props) {
   }
 
   return (
+    <Modal
+    open={openEditCard}
+    onClose={handleCloseEditCard}
+  >
+    <Box className='modalBox'>
     <div className='modalWindow'>
-      <div className='smallInputGroup'> 
+      <div className='modalSmallInputGroup'> 
         <div>
           <label>Сумма</label>
           <input type='number' className='input form-control' value={amount} onChange={setAmount}/>
@@ -61,20 +68,20 @@ export default function ModalEditCard(props) {
           </select>
         </div>  
       </div>
-      <div className='modalEditCardName'>
+      <div>
         <label>Назва картки</label>
         <input className='input form-control ' value={cardName} onChange={onChangeName}/>
       </div>
         <div className='modalButtonGroup'>
         <button 
           onClick={() => onSubmit()}
-          className="btn btn-primary formButton"
+          className="btn btn-primary modalButton"
         >
           Зберегти
         </button>
         <button 
           onClick={handleCloseEditCard}
-          className="btn btn-primary formButton"
+          className="btn btn-primary modalButton"
         >
           Скасувати
         </button>
@@ -86,5 +93,8 @@ export default function ModalEditCard(props) {
         </button>
         </div>
     </div>
+    </Box>
+  </Modal>
+    
   )
 }
