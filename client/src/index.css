@@ -144,7 +144,7 @@
     bottom: 55px;
 }
 
-.cardDeleteButton:hover {
+.cardDeleteButton:hover, .modalDeleteButton:hover {
     background-color: rgb(182, 43, 43);
     border-color: rgb(124, 23, 23);
 }
