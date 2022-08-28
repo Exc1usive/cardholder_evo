@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const axios = require("axios");
-require("dotenv").config({ path: "./config.env" });
+require("dotenv").config();
 const path = require("path");
 
 const Wallet = require("./models/wallet.js");
@@ -29,8 +29,8 @@ app.get("/", (req, res) => {
 // deployment
 
 // connect to mongoDB
-const ATLAS_URI = process.env.ATLAS_URI;
-mongoose.connect(ATLAS_URI, () => console.log("Successfully connect to mongoDB"));
+const ATLAS_URL = process.env.ATLAS_URL;
+mongoose.connect(ATLAS_URL, () => console.log("Successfully connect to mongoDB"));
 
 async function getExtraCardDate(pan) {
   let res = await axios.get(`https://lookup.binlist.net/${pan.replace(/\D+/g, "")}`);
