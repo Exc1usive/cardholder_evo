@@ -127,4 +127,9 @@ app.put("/api/wallet/card/edit", (req, res) => {
   });
 });
 
+// GET currencyList
+app.get("/api/currency", (req, res) => {
+  res.json(["UAH", "USD", "EUR"]);
+});
+
 app.listen(port, () => console.log("Server start on port - " + port));
