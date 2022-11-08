@@ -21,7 +21,7 @@ export default function ModalAddCash(props) {
 
   function onSubmit() {
     axios
-      .post("/api/wallet/cash/add", form)
+      .post("http://localhost:5000/api/wallet/cash/add", form)
       .then(() => {
         handleCloseAddCash();
         setUpdateForm((prev) => !prev);

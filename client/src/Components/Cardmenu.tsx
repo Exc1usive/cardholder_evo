@@ -2,27 +2,31 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ModalAddCard from "./ModalAddCard";
 import ModalAddCash from "./ModalAddCash";
+import { Cards } from "../models/interfaces";
 
 export default function Cardmenu(props) {
   const { updateForm, setUpdateForm, id, listCurrency } = props;
 
-  const [cards, setCards] = useState([
-    {
-      pan: "",
-      expire_date: "",
-      payment_system: "",
-      card_type: "",
-      card_holder: "",
-      currencyName: "",
-      amount: 0,
-      original_pan: "",
-      masked_pan: "",
-    },
-  ]);
+  const [cards, setCards] = useState<Cards>([
+      {
+        _id: "",
+        pan: "",
+        expire_date: "",
+        cvv: "",
+        payment_system: "",
+        card_type: "",
+        card_holder: "",
+        currencyName: "",
+        amount: 0,
+        name: "",
+        original_pan: "",
+        masked_pan: "",
+      },
+    ]);
 
   useEffect(() => {
     axios
-      .get(`/api/wallet/${id}`)
+      .get(`http://localhost:5000/api/wallet/${id}`)
       .then((res) => {
         setCards(res.data.cards);
         res.data.cards.map((card, i) => {
@@ -89,7 +93,7 @@ export default function Cardmenu(props) {
         } else {
           prev[i].pan = prev[i].masked_pan;
         }
-        setCards(prev);
+        return prev;
       });
     }
 
@@ -122,50 +126,55 @@ export default function Cardmenu(props) {
         .catch((err) => console.log(err));
     }
 
-    return cards.map((card, i) => {
-      return (
-        <div className='cardList' key={i}>
-          <div className='cardBox'>
-            <div className='card'>
-              {checkImageExist(i) ? (
-                <img
-                  className='cardPaymentSystemImage'
-                  src={`./${card.payment_system}.png`}
-                  alt='paymentSystem'
-                ></img>
-              ) : (
-                <label className='cardPaymentSystemLabel'>{card.payment_system}</label>
-              )}
-              <label className='cardType'>{card.card_type}</label>
-              <p className='cardName'>{card.name}</p>
-              <p className='cardAmount'>
-                {card.amount} {card.currencyName}
-              </p>
-              <div className='panBox'>
-                <p id='cardId' className='cardPan' onClick={() => handlePanClick(i)}>
-                  {card.pan}
-                </p>
+    return (
+      <>
+        {" "}
+        {cards.map((card, i) => {
+          return (
+            <div className='cardList' key={i}>
+              <div className='cardBox'>
+                <div className='card'>
+                  {checkImageExist(i) ? (
+                    <img
+                      className='cardPaymentSystemImage'
+                      src={`./${card.payment_system}.png`}
+                      alt='paymentSystem'
+                    ></img>
+                  ) : (
+                    <label className='cardPaymentSystemLabel'>{card.payment_system}</label>
+                  )}
+                  <label className='cardType'>{card.card_type}</label>
+                  <p className='cardName'>{card.name}</p>
+                  <p className='cardAmount'>
+                    {card.amount} {card.currencyName}
+                  </p>
+                  <div className='panBox'>
+                    <p id='cardId' className='cardPan' onClick={() => handlePanClick(i)}>
+                      {card.pan}
+                    </p>
+                    <button
+                      className='copyPan btn btn-primary-outline'
+                      onClick={() => handleCopyClick(i)}
+                    >
+                      copy
+                    </button>
+                  </div>
+                  <p className='cardDateExpire'>{card.expire_date}</p>
+                </div>
+              </div>
+              <div>
                 <button
-                  className='copyPan btn btn-primary-outline'
-                  onClick={() => handleCopyClick(i)}
+                  className='btn btn-dark cardDeleteButton'
+                  onClick={() => handleDeleteClick(card._id)}
                 >
-                  copy
+                  Видалити
                 </button>
               </div>
-              <p className='cardDateExpire'>{card.expire_date}</p>
             </div>
-          </div>
-          <div>
-            <button
-              className='btn btn-dark cardDeleteButton'
-              onClick={() => handleDeleteClick(card._id)}
-            >
-              Видалити
-            </button>
-          </div>
-        </div>
-      );
-    });
+          );
+        })}
+      </>
+    );
   };
 
   return (

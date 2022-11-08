@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModalEditCash from "./ModalEditCash";
 import ModalEditCard from "./ModalEditCard";
 import axios from "axios";
+import { Wallet } from "../models/interfaces"
 
 export default function Sidemenu(props) {
   const { updateForm, setUpdateForm, id, listCurrency } = props;
@@ -10,22 +11,26 @@ export default function Sidemenu(props) {
   const [currencyName, setCurrencyName] = useState("");
   const [cardName, setCardName] = useState("");
   const [walletId, setWalletId] = useState("");
-  const [wallet, setWallet] = useState({
+  const [wallet, setWallet] = useState<Wallet>({
     cash: [
       {
+        _id: "",
         currencyName: "",
         amount: 0,
       },
     ],
     cards: [
       {
+        _id: "",
         pan: "",
         expire_date: "",
+        cvv: "",
         payment_system: "",
         card_type: "",
         card_holder: "",
         currencyName: "",
         amount: 0,
+        name: ""
       },
     ],
   });
@@ -42,7 +47,7 @@ export default function Sidemenu(props) {
 
   useEffect(() => {
     axios
-      .get(`/api/wallet/${id}`)
+      .get(`http://localhost:5000/api/wallet/${id}`)
       .then((res) => setWallet(res.data))
       .catch((err) => console.log(err));
   }, [id, updateForm]);
@@ -124,7 +129,7 @@ export default function Sidemenu(props) {
     return balance.map((currency, i) => (
       <div key={i} className='sideRow'>
         <li>
-          {currency.amount} {currency.currencyName}
+          {currency['amount']} {currency['currencyName']}
         </li>
       </div>
     ));

@@ -22,7 +22,7 @@ export default function ModalAddCard(props) {
   const onSubmit = (data) => {
     if (cardValidationError === true) return null;
     axios
-      .post("/api/wallet/card/add", { ...data })
+      .post("http://localhost:5000/api/wallet/card/add", { ...data })
       .then((res) => {
         if (res.data === "Card already exist") setCardExists(true);
         if (res.data === "Card added") {

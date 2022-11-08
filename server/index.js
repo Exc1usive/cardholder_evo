@@ -20,11 +20,11 @@ app.use(
 
 // deployment
 
-app.use(express.static(path.join(__dirname, "../client/build")));
+// app.use(express.static(path.join(__dirname, "../client/build")));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+// });
 
 // deployment
 
@@ -129,7 +129,9 @@ app.put("/api/wallet/card/edit", (req, res) => {
 
 // GET currencyList
 app.get("/api/currency", (req, res) => {
-  res.json(["UAH", "USD", "EUR"]);
+  res.json({
+    currency: ["UAH", "USD", "EUR"],
+  });
 });
 
 app.listen(port, () => console.log("Server start on port - " + port));

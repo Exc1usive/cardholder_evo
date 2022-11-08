@@ -23,7 +23,7 @@ export default function ModalEditCash(props) {
       id: cashId,
     };
     axios
-      .put("/api/wallet/cash/edit", editedCash)
+      .put("http://localhost:5000/api/wallet/cash/edit", editedCash)
       .then(() => {
         setUpdateForm((prev) => !prev);
         handleCloseEditCash();

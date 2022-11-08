@@ -26,7 +26,7 @@ export default function ModalEditCard(props) {
       id: cardId,
     };
     axios
-      .put("/api/wallet/card/edit", editedCard)
+      .put("http://localhost:5000/api/wallet/card/edit", editedCard)
       .then(() => {
         setUpdateForm((prev) => !prev);
         handleCloseEditCard();
