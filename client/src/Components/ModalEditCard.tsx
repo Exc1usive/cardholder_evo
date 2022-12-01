@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-export default function ModalEditCard(props) {
+export default function ModalEditCard(props: any) { // what to do with props?
   const {
     setAmount,
     selectedCurrency,
@@ -26,9 +26,9 @@ export default function ModalEditCard(props) {
       id: cardId,
     };
     axios
-      .put("http://localhost:5000/api/wallet/card/edit", editedCard)
+      .put("api/wallet/card/edit", editedCard)
       .then(() => {
-        setUpdateForm((prev) => !prev);
+        setUpdateForm((prev: boolean) => !prev);
         handleCloseEditCard();
       })
       .catch((err) => console.log(err));
@@ -38,7 +38,7 @@ export default function ModalEditCard(props) {
     axios
       .delete(`/api/wallet/card/${cardId}`)
       .then(() => {
-        setUpdateForm((prev) => !prev);
+        setUpdateForm((prev: boolean) => !prev);
         handleCloseEditCard();
       })
       .catch((err) => console.log(err));
@@ -61,7 +61,7 @@ export default function ModalEditCard(props) {
             <div>
               <label>Валюта</label>
               <select value={selectedCurrency} onChange={onChangeCurrency} className='form-control'>
-                {listCurrency.map((currency, index) => (
+                {listCurrency.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
                   </option>

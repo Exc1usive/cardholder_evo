@@ -2,34 +2,34 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ModalAddCard from "./ModalAddCard";
 import ModalAddCash from "./ModalAddCash";
-import { Cards } from "../models/interfaces";
+import { Cards, Card } from "../models/interfaces";
 
-export default function Cardmenu(props) {
+export default function Cardmenu(props: any) { // what to do with props?
   const { updateForm, setUpdateForm, id, listCurrency } = props;
 
   const [cards, setCards] = useState<Cards>([
-      {
-        _id: "",
-        pan: "",
-        expire_date: "",
-        cvv: "",
-        payment_system: "",
-        card_type: "",
-        card_holder: "",
-        currencyName: "",
-        amount: 0,
-        name: "",
-        original_pan: "",
-        masked_pan: "",
-      },
-    ]);
+    {
+      _id: "",
+      pan: "",
+      expire_date: "",
+      cvv: "",
+      payment_system: "",
+      card_type: "",
+      card_holder: "",
+      currencyName: "",
+      amount: 0,
+      name: "",
+      original_pan: "",
+      masked_pan: "",
+    },
+  ]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/wallet/${id}`)
+      .get(`api/wallet/${id}`)
       .then((res) => {
         setCards(res.data.cards);
-        res.data.cards.map((card, i) => {
+        res.data.cards.map((card: Card, i: number) => {
           return setCards((prev) => {
             prev[i].masked_pan = card.pan.slice(0, 4) + " **** **** " + card.pan.slice(15, 19);
             prev[i].original_pan = card.pan;
@@ -86,7 +86,7 @@ export default function Cardmenu(props) {
   };
 
   const CardList = () => {
-    function handlePanClick(i) {
+    function handlePanClick(i: number) {
       setCards((prev) => {
         if (prev[i].pan === prev[i].masked_pan) {
           prev[i].pan = prev[i].original_pan;
@@ -97,11 +97,11 @@ export default function Cardmenu(props) {
       });
     }
 
-    function handleCopyClick(i) {
+    function handleCopyClick(i: number) {
       navigator.clipboard.writeText(cards[i].original_pan);
     }
 
-    function checkImageExist(card_index) {
+    function checkImageExist(card_index: number) {
       let card_payment_system = cards[card_index].payment_system;
       let imageExist = false;
 
@@ -117,11 +117,11 @@ export default function Cardmenu(props) {
       return imageExist;
     }
 
-    function handleDeleteClick(id) {
+    function handleDeleteClick(id: string) {
       axios
         .delete(`/api/wallet/card/${id}`)
         .then(() => {
-          setUpdateForm((prev) => !prev);
+          setUpdateForm((prev:boolean) => !prev);
         })
         .catch((err) => console.log(err));
     }

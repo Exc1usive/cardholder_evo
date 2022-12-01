@@ -1,4 +1,4 @@
-export default function luhnCheck(val) {
+export default function luhnCheck(val: string): boolean {
   let checksum = 0; // running checksum total
   let j = 1; // takes value of 1 or 2
 

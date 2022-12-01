@@ -39,6 +39,21 @@ export interface Card {
 
 export interface Cards extends Array<Card>{}
 
+export interface Cash {
+  _id: string
+  currencyName: string,
+  amount: number,
+}
+
+export interface Cashes extends Array<Cash>{}
+
 export interface Currency {
   currency: [string]
 }
+
+export interface Balance {
+  currencyName: string,
+  amount: number,
+}
+
+export interface Balances extends Array<Balance>{}

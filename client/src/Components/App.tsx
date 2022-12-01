@@ -1,8 +1,8 @@
-import Sidemenu from "./Sidemenu.tsx";
-import Cardmenu from "./Cardmenu.tsx";
+import Sidemenu from "./Sidemenu";
+import Cardmenu from "./Cardmenu";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Currency } from "../models/interfaces"
+import { Currency } from "../models/interfaces";
 
 function App() {
   const [updateForm, setUpdateForm] = useState(true);
@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/currency`)
+      .get(`api/currency`)
       .then((res) => {
         setListCurrency(res.data);
       })

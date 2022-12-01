@@ -2,29 +2,30 @@ import React, { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { Cash } from "../models/interfaces"
 
-export default function ModalAddCash(props) {
+export default function ModalAddCash(props:any) { // what to do with props?
   const { listCurrency, openAddCash, handleCloseAddCash, setUpdateForm, id } = props;
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Cash>({
     amount: 0,
     currencyName: "UAH",
-    id: id,
+    _id: id,
   });
 
   // These methods will update the state properties all string
-  function updateForm(value) {
-    return setForm((prev) => {
+  function updateForm(value: object) {
+    return setForm((prev: Cash) => {
       return { ...prev, ...value };
     });
   }
 
   function onSubmit() {
     axios
-      .post("http://localhost:5000/api/wallet/cash/add", form)
+      .post("api/wallet/cash/add", form)
       .then(() => {
         handleCloseAddCash();
-        setUpdateForm((prev) => !prev);
+        setUpdateForm((prev: Cash) => !prev);
       })
       .catch((err) => console.log(err));
   }
@@ -46,11 +47,11 @@ export default function ModalAddCash(props) {
             <div>
               <label>Валюта</label>
               <select
-                value={form.currency}
+                value={form.currencyName}
                 onChange={(e) => updateForm({ currencyName: e.target.value })}
                 className='form-control smallInput'
               >
-                {listCurrency.map((currency, index) => (
+                {listCurrency.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
                   </option>
