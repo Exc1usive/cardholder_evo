@@ -2,50 +2,48 @@ import React from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { ModalEditCashProps } from "../models/interfaces";
 
-export default function ModalEditCard(props) {
+export default function ModalEditCash(props: ModalEditCashProps) {
   const {
-    setAmount,
+    listCurrency,
+    cashId,
     selectedCurrency,
     onChangeCurrency,
-    listCurrency,
-    handleCloseEditCard,
     amount,
-    cardId,
+    setAmount,
+    handleCloseEditCash,
     setUpdateForm,
-    cardName,
-    onChangeName,
-    openEditCard,
+    openEditCash,
   } = props;
 
   function onSubmit() {
-    let editedCard = {
+    let editedCash = {
       currencyName: selectedCurrency,
       amount: amount || 0,
-      name: cardName,
-      id: cardId,
+      id: cashId,
     };
     axios
-      .put("/api/wallet/card/edit", editedCard)
+      .put("api/wallet/cash/edit", editedCash)
       .then(() => {
         setUpdateForm((prev) => !prev);
-        handleCloseEditCard();
+        handleCloseEditCash();
       })
       .catch((err) => console.log(err));
   }
 
   function onDelete() {
     axios
-      .delete(`/api/wallet/card/${cardId}`)
+      .delete(`/api/wallet/cash/${cashId}`)
       .then(() => {
         setUpdateForm((prev) => !prev);
-        handleCloseEditCard();
+        handleCloseEditCash();
       })
       .catch((err) => console.log(err));
   }
 
   return (
-    <Modal open={openEditCard} onClose={handleCloseEditCard}>
+    <Modal open={openEditCash} onClose={handleCloseEditCash}>
       <Box className='modalBox'>
         <div className='modalWindow'>
           <div className='modalSmallInputGroup'>
@@ -60,8 +58,12 @@ export default function ModalEditCard(props) {
             </div>
             <div>
               <label>Валюта</label>
-              <select value={selectedCurrency} onChange={onChangeCurrency} className='form-control'>
-                {listCurrency.map((currency, index) => (
+              <select
+                value={selectedCurrency}
+                onChange={onChangeCurrency}
+                className='form-control'
+              >
+                {listCurrency.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
                   </option>
@@ -69,18 +71,20 @@ export default function ModalEditCard(props) {
               </select>
             </div>
           </div>
-          <div>
-            <label>Назва картки</label>
-            <input className='input form-control ' value={cardName} onChange={onChangeName} />
-          </div>
           <div className='modalButtonGroup'>
-            <button onClick={() => onSubmit()} className='btn btn-primary modalButton'>
+            <button onClick={onSubmit} className='btn btn-primary modalButton'>
               Зберегти
             </button>
-            <button onClick={handleCloseEditCard} className='btn btn-primary modalButton'>
+            <button
+              onClick={handleCloseEditCash}
+              className='btn btn-primary modalButton'
+            >
               Скасувати
             </button>
-            <button onClick={onDelete} className='btn btn-primary formButton modalDeleteButton'>
+            <button
+              onClick={onDelete}
+              className='btn btn-primary modalButton modalDeleteButton'
+            >
               Видалити
             </button>
           </div>

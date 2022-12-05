@@ -2,30 +2,38 @@ import React, { useState, useEffect } from "react";
 import ModalEditCash from "./ModalEditCash";
 import ModalEditCard from "./ModalEditCard";
 import axios from "axios";
+import { Wallet, Balance, SidemenuProps } from "../models/interfaces";
 
-export default function Sidemenu(props) {
-  const { updateForm, setUpdateForm, id, listCurrency } = props;
-
+export default function Sidemenu({
+  updateForm,
+  setUpdateForm,
+  id,
+  listCurrency,
+}: SidemenuProps) {
   const [amount, setAmount] = useState(0);
   const [currencyName, setCurrencyName] = useState("");
   const [cardName, setCardName] = useState("");
   const [walletId, setWalletId] = useState("");
-  const [wallet, setWallet] = useState({
+  const [wallet, setWallet] = useState<Wallet>({
     cash: [
       {
+        _id: "",
         currencyName: "",
         amount: 0,
       },
     ],
     cards: [
       {
+        _id: "",
         pan: "",
         expire_date: "",
+        cvv: "",
         payment_system: "",
         card_type: "",
         card_holder: "",
         currencyName: "",
         amount: 0,
+        name: "",
       },
     ],
   });
@@ -42,7 +50,7 @@ export default function Sidemenu(props) {
 
   useEffect(() => {
     axios
-      .get(`/api/wallet/${id}`)
+      .get(`api/wallet/${id}`)
       .then((res) => setWallet(res.data))
       .catch((err) => console.log(err));
   }, [id, updateForm]);
@@ -74,17 +82,16 @@ export default function Sidemenu(props) {
   }
 
   function cardList() {
-    return wallet.cards.map((card, i) => {
+    return wallet.cards.map((card) => {
       return (
-        <div key={i} className='sideRow'>
-          <li key={i}>
+        <div key={card._id} className='sideRow'>
+          <li>
             {card.name}: {card.amount} {card.currencyName}{" "}
           </li>
           <button
-            key={card._id}
-            name={i}
+            name={card._id}
             className='btn btn-dark'
-            onClick={(e) => {
+            onClick={() => {
               setCurrencyName(card.currencyName);
               setAmount(card.amount);
               setWalletId(card._id);
@@ -100,8 +107,13 @@ export default function Sidemenu(props) {
   }
 
   function balanceList() {
-    let balance = [];
-    listCurrency.map((currency) => {
+    let balances: Balance[] = [
+      {
+        currencyName: "",
+        amount: 0,
+      },
+    ];
+    listCurrency.map((currency: string): void => {
       let currentCurrency = {
         currencyName: currency,
         amount: 0,
@@ -118,16 +130,19 @@ export default function Sidemenu(props) {
         }
         return null;
       });
-      if (currentCurrency.amount !== 0) balance.push(currentCurrency);
+      if (currentCurrency.amount !== 0) balances.push(currentCurrency);
       return null;
     });
-    return balance.map((currency, i) => (
-      <div key={i} className='sideRow'>
-        <li>
-          {currency.amount} {currency.currencyName}
-        </li>
-      </div>
-    ));
+    return balances.map((balance: Balance, i: number) => {
+      if (balance.amount === 0) return null;
+      return (
+        <div key={i} className='sideRow'>
+          <li>
+            {balance["amount"]} {balance["currencyName"]}
+          </li>
+        </div>
+      );
+    });
   }
 
   return (
@@ -150,7 +165,7 @@ export default function Sidemenu(props) {
         selectedCurrency={currencyName}
         onChangeCurrency={(e) => setCurrencyName(e.target.value)}
         amount={amount}
-        setAmount={(e) => setAmount(e.target.value)}
+        setAmount={(e) => setAmount(parseInt(e.target.value))}
         handleCloseEditCash={handleCloseEditCash}
         setUpdateForm={setUpdateForm}
         openEditCash={openEditCash}
@@ -161,13 +176,13 @@ export default function Sidemenu(props) {
         cardId={walletId}
         selectedCurrency={currencyName}
         onChangeCurrency={(e) => setCurrencyName(e.target.value)}
-        cardName={cardName}
-        onChangeName={(e) => setCardName(e.target.value)}
         amount={amount}
-        setAmount={(e) => setAmount(e.target.value)}
+        setAmount={(e) => setAmount(parseInt(e.target.value))}
         handleCloseEditCard={handleCloseEditCard}
         setUpdateForm={setUpdateForm}
         openEditCard={openEditCard}
+        cardName={cardName}
+        onChangeName={(e) => setCardName(e.target.value)}
       />
     </div>
   );
