@@ -2,20 +2,25 @@ import React, { useState } from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Cash } from "../models/interfaces"
+import { Cash, ModalAddCashProps } from "../models/interfaces";
 
-export default function ModalAddCash(props:any) { // what to do with props?
-  const { listCurrency, openAddCash, handleCloseAddCash, setUpdateForm, id } = props;
+export default function ModalAddCash({
+  listCurrency,
+  openAddCash,
+  handleCloseAddCash,
+  setUpdateForm,
+  id,
+}: ModalAddCashProps) {
 
   const [form, setForm] = useState<Cash>({
     amount: 0,
-    currencyName: "UAH",
-    _id: id,
+    currencyName: "",
+    _id: "",
   });
 
   // These methods will update the state properties all string
-  function updateForm(value: object) {
-    return setForm((prev: Cash) => {
+  function updateForm(value: Partial<Cash>) {
+    return setForm((prev) => {
       return { ...prev, ...value };
     });
   }
@@ -25,7 +30,7 @@ export default function ModalAddCash(props:any) { // what to do with props?
       .post("api/wallet/cash/add", form)
       .then(() => {
         handleCloseAddCash();
-        setUpdateForm((prev: Cash) => !prev);
+        setUpdateForm((prev) => !prev);
       })
       .catch((err) => console.log(err));
   }
@@ -41,7 +46,7 @@ export default function ModalAddCash(props:any) { // what to do with props?
                 type='number'
                 className='input form-control smallInput'
                 value={form.amount}
-                onChange={(e) => updateForm({ amount: e.target.value })}
+                onChange={(e) => updateForm({ amount: parseInt(e.target.value) })}
               />
             </div>
             <div>
@@ -63,7 +68,10 @@ export default function ModalAddCash(props:any) { // what to do with props?
             <button onClick={onSubmit} className='btn btn-primary modalButton'>
               Зберегти
             </button>
-            <button onClick={handleCloseAddCash} className='btn btn-primary modalButton'>
+            <button
+              onClick={handleCloseAddCash}
+              className='btn btn-primary modalButton'
+            >
               Скасувати
             </button>
           </div>

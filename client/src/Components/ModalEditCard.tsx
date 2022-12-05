@@ -1,21 +1,22 @@
-import React from "react"
+import React from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { ModalEditCardProps } from "../models/interfaces";
 
-export default function ModalEditCard(props: any) { // what to do with props?
+export default function ModalEditCard(props: ModalEditCardProps) {
   const {
-    setAmount,
+    listCurrency,
+    cardId,
     selectedCurrency,
     onChangeCurrency,
-    listCurrency,
-    handleCloseEditCard,
     amount,
-    cardId,
+    setAmount,
+    handleCloseEditCard,
     setUpdateForm,
+    openEditCard,
     cardName,
     onChangeName,
-    openEditCard,
   } = props;
 
   function onSubmit() {
@@ -28,7 +29,7 @@ export default function ModalEditCard(props: any) { // what to do with props?
     axios
       .put("api/wallet/card/edit", editedCard)
       .then(() => {
-        setUpdateForm((prev: boolean) => !prev);
+        setUpdateForm((prev) => !prev);
         handleCloseEditCard();
       })
       .catch((err) => console.log(err));
@@ -38,7 +39,7 @@ export default function ModalEditCard(props: any) { // what to do with props?
     axios
       .delete(`/api/wallet/card/${cardId}`)
       .then(() => {
-        setUpdateForm((prev: boolean) => !prev);
+        setUpdateForm((prev) => !prev);
         handleCloseEditCard();
       })
       .catch((err) => console.log(err));
@@ -60,7 +61,11 @@ export default function ModalEditCard(props: any) { // what to do with props?
             </div>
             <div>
               <label>Валюта</label>
-              <select value={selectedCurrency} onChange={onChangeCurrency} className='form-control'>
+              <select
+                value={selectedCurrency}
+                onChange={onChangeCurrency}
+                className='form-control'
+              >
                 {listCurrency.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
@@ -71,16 +76,29 @@ export default function ModalEditCard(props: any) { // what to do with props?
           </div>
           <div>
             <label>Назва картки</label>
-            <input className='input form-control ' value={cardName} onChange={onChangeName} />
+            <input
+              className='input form-control '
+              value={cardName}
+              onChange={onChangeName}
+            />
           </div>
           <div className='modalButtonGroup'>
-            <button onClick={() => onSubmit()} className='btn btn-primary modalButton'>
+            <button
+              onClick={() => onSubmit()}
+              className='btn btn-primary modalButton'
+            >
               Зберегти
             </button>
-            <button onClick={handleCloseEditCard} className='btn btn-primary modalButton'>
+            <button
+              onClick={handleCloseEditCard}
+              className='btn btn-primary modalButton'
+            >
               Скасувати
             </button>
-            <button onClick={onDelete} className='btn btn-primary formButton modalDeleteButton'>
+            <button
+              onClick={onDelete}
+              className='btn btn-primary formButton modalDeleteButton'
+            >
               Видалити
             </button>
           </div>

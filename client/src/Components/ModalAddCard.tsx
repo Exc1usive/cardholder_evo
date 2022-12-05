@@ -1,16 +1,19 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import InputMask from "react-input-mask";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import luhnCheck from "../utils/luhnCheck";
-import { Card } from "../models/interfaces"
+import { Card, ModalAddCardProprs } from "../models/interfaces";
 
-export default function ModalAddCard(props:any) { // what to do with props?
-  const { handleCloseAddCard, listCurrency, setUpdateForm, openAddCard } = props;
-
+export default function ModalAddCard({
+  handleCloseAddCard,
+  listCurrency,
+  setUpdateForm,
+  openAddCard,
+}: ModalAddCardProprs) {
   const [cardValidationError, setCardValidationError] = useState(false);
   const [cardExists, setCardExists] = useState(false);
 
@@ -18,10 +21,9 @@ export default function ModalAddCard(props:any) { // what to do with props?
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm<Card>();
 
-  var onSubmit : (data: Card) => void;
-  onSubmit = (data) => {
+  const onSubmit: SubmitHandler<Card> = (data) => {
     if (cardValidationError === true) return null;
     axios
       .post("api/wallet/card/add", { ...data })
@@ -29,13 +31,13 @@ export default function ModalAddCard(props:any) { // what to do with props?
         if (res.data === "Card already exist") setCardExists(true);
         if (res.data === "Card added") {
           handleCloseAddCard();
-          setUpdateForm((prev: boolean) => !prev);
+          setUpdateForm((prev) => !prev);
         }
       })
       .catch((err) => console.log(err));
   };
 
-  const handleChangeCard = (e: { target: { value: string; }; }): void => {
+  const handleChangeCard = (e: React.ChangeEvent<HTMLInputElement>): void => {
     let card = e.target.value;
     card = card.replace(/\D+/g, "");
 
@@ -69,18 +71,30 @@ export default function ModalAddCard(props:any) { // what to do with props?
       <Modal open={openAddCard} onClose={handleCloseAddCard}>
         <Box className='modalBox'>
           {cardValidationError ? (
-            <Alert severity='error'>Такої картки не існує в світі, спробуйте іншу</Alert>
+            <Alert severity='error'>
+              Такої картки не існує в світі, спробуйте іншу
+            </Alert>
           ) : errors.pan ? (
-            <Alert severity='error'>{errors.pan.message as unknown as string}</Alert>
+            <Alert severity='error'>
+              {errors.pan.message}
+            </Alert>
           ) : errors.expire_date ? (
-            <Alert severity='error'>{errors.expire_date.message as unknown as string}</Alert>
+            <Alert severity='error'>
+              {errors.expire_date.message}
+            </Alert>
           ) : errors.cvv ? (
-            <Alert severity='error'>{errors.cvv.message as unknown as string}</Alert>
+            <Alert severity='error'>
+              {errors.cvv.message}
+            </Alert>
           ) : errors.card_holder ? (
-            <Alert severity='error'>{errors.card_holder.message as unknown as string}</Alert>
+            <Alert severity='error'>
+              {errors.card_holder.message}
+            </Alert>
           ) : (
             errors.amount && (
-              <Alert severity='error'>{errors.amount.message as unknown as string}</Alert>
+              <Alert severity='error'>
+                {errors.amount.message}
+              </Alert>
             )
           )}
           {cardExists && <Alert severity='error'>Ця карта вже додана!</Alert>}
@@ -160,7 +174,11 @@ export default function ModalAddCard(props:any) { // what to do with props?
 
             <div className='form-group'>
               <label>Назва картки</label>
-              <input {...register("name")} className='form-control' maxLength={20} />
+              <input
+                {...register("name")}
+                className='form-control'
+                maxLength={20}
+              />
             </div>
 
             <div className='modalSmallInputGroup'>
@@ -172,7 +190,7 @@ export default function ModalAddCard(props:any) { // what to do with props?
                       value: /[0-9]/,
                       message: "Кількість введено невірно",
                     },
-                    value: "0",
+                    value: 0,
                   })}
                   placeholder='0'
                   className='input form-control'
@@ -184,7 +202,7 @@ export default function ModalAddCard(props:any) { // what to do with props?
               <div>
                 <label>Валюта</label>
                 <select {...register("currencyName")} className='form-control'>
-                  {listCurrency.map((currency: [string], index: number) => (
+                  {listCurrency.map((currency: string, index: number) => (
                     <option key={index} value={currency}>
                       {currency}
                     </option>
@@ -194,7 +212,11 @@ export default function ModalAddCard(props:any) { // what to do with props?
             </div>
 
             <div className='modalButtonGroup'>
-              <input type='submit' value='Додати' className='btn btn-primary modalButton' />
+              <input
+                type='submit'
+                value='Додати'
+                className='btn btn-primary modalButton'
+              />
               <input
                 type='button'
                 value='Закрити'

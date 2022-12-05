@@ -1,17 +1,18 @@
-import React from "react"
+import React from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { ModalEditCashProps } from "../models/interfaces";
 
-export default function ModalEditCash(props: any) { // what to do with props?
+export default function ModalEditCash(props: ModalEditCashProps) {
   const {
-    setAmount,
+    listCurrency,
+    cashId,
     selectedCurrency,
     onChangeCurrency,
-    listCurrency,
-    handleCloseEditCash,
     amount,
-    cashId,
+    setAmount,
+    handleCloseEditCash,
     setUpdateForm,
     openEditCash,
   } = props;
@@ -25,7 +26,7 @@ export default function ModalEditCash(props: any) { // what to do with props?
     axios
       .put("api/wallet/cash/edit", editedCash)
       .then(() => {
-        setUpdateForm((prev: boolean) => !prev);
+        setUpdateForm((prev) => !prev);
         handleCloseEditCash();
       })
       .catch((err) => console.log(err));
@@ -35,7 +36,7 @@ export default function ModalEditCash(props: any) { // what to do with props?
     axios
       .delete(`/api/wallet/cash/${cashId}`)
       .then(() => {
-        setUpdateForm((prev: boolean) => !prev);
+        setUpdateForm((prev) => !prev);
         handleCloseEditCash();
       })
       .catch((err) => console.log(err));
@@ -57,7 +58,11 @@ export default function ModalEditCash(props: any) { // what to do with props?
             </div>
             <div>
               <label>Валюта</label>
-              <select value={selectedCurrency} onChange={onChangeCurrency} className='form-control'>
+              <select
+                value={selectedCurrency}
+                onChange={onChangeCurrency}
+                className='form-control'
+              >
                 {listCurrency.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
@@ -70,10 +75,16 @@ export default function ModalEditCash(props: any) { // what to do with props?
             <button onClick={onSubmit} className='btn btn-primary modalButton'>
               Зберегти
             </button>
-            <button onClick={handleCloseEditCash} className='btn btn-primary modalButton'>
+            <button
+              onClick={handleCloseEditCash}
+              className='btn btn-primary modalButton'
+            >
               Скасувати
             </button>
-            <button onClick={onDelete} className='btn btn-primary modalButton modalDeleteButton'>
+            <button
+              onClick={onDelete}
+              className='btn btn-primary modalButton modalDeleteButton'
+            >
               Видалити
             </button>
           </div>

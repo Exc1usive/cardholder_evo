@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ModalAddCard from "./ModalAddCard";
 import ModalAddCash from "./ModalAddCash";
-import { Cards, Card } from "../models/interfaces";
+import { Card, CardmenuProps } from "../models/interfaces";
 
-export default function Cardmenu(props: any) { // what to do with props?
-  const { updateForm, setUpdateForm, id, listCurrency } = props;
-
-  const [cards, setCards] = useState<Cards>([
+export default function Cardmenu({
+  updateForm,
+  setUpdateForm,
+  id,
+  listCurrency,
+}: CardmenuProps) {
+  const [cards, setCards] = useState<Card[]>([
     {
       _id: "",
       pan: "",
@@ -31,7 +34,8 @@ export default function Cardmenu(props: any) { // what to do with props?
         setCards(res.data.cards);
         res.data.cards.map((card: Card, i: number) => {
           return setCards((prev) => {
-            prev[i].masked_pan = card.pan.slice(0, 4) + " **** **** " + card.pan.slice(15, 19);
+            prev[i].masked_pan =
+              card.pan.slice(0, 4) + " **** **** " + card.pan.slice(15, 19);
             prev[i].original_pan = card.pan;
             prev[i].pan = prev[i].masked_pan;
             return prev;
@@ -44,11 +48,14 @@ export default function Cardmenu(props: any) { // what to do with props?
   const ModalAddCardButton = () => {
     // state for open and close modal ADD WALLET window
     const [openAddCard, setOpenAddCard] = useState(false);
-    const handleOpenAddCard = () => setOpenAddCard(true);
-    const handleCloseAddCard = () => setOpenAddCard(false);
+    const handleOpenAddCard = (): void => setOpenAddCard(true);
+    const handleCloseAddCard = (): void => setOpenAddCard(false);
     return (
       <>
-        <button className='btn btn-secondary cardMenuButton' onClick={handleOpenAddCard}>
+        <button
+          className='btn btn-secondary cardMenuButton'
+          onClick={handleOpenAddCard}
+        >
           Додати карту
         </button>
 
@@ -70,7 +77,10 @@ export default function Cardmenu(props: any) { // what to do with props?
 
     return (
       <>
-        <button className='btn btn-secondary cardMenuButton' onClick={handleOpenAddCash}>
+        <button
+          className='btn btn-secondary cardMenuButton'
+          onClick={handleOpenAddCash}
+        >
           Додати готівку
         </button>
 
@@ -93,7 +103,8 @@ export default function Cardmenu(props: any) { // what to do with props?
         } else {
           prev[i].pan = prev[i].masked_pan;
         }
-        return prev;
+        setCards(prev);
+        return null;
       });
     }
 
@@ -121,14 +132,13 @@ export default function Cardmenu(props: any) { // what to do with props?
       axios
         .delete(`/api/wallet/card/${id}`)
         .then(() => {
-          setUpdateForm((prev:boolean) => !prev);
+          setUpdateForm((prev: boolean) => !prev);
         })
         .catch((err) => console.log(err));
     }
 
     return (
       <>
-        {" "}
         {cards.map((card, i) => {
           return (
             <div className='cardList' key={i}>
@@ -141,7 +151,9 @@ export default function Cardmenu(props: any) { // what to do with props?
                       alt='paymentSystem'
                     ></img>
                   ) : (
-                    <label className='cardPaymentSystemLabel'>{card.payment_system}</label>
+                    <label className='cardPaymentSystemLabel'>
+                      {card.payment_system}
+                    </label>
                   )}
                   <label className='cardType'>{card.card_type}</label>
                   <p className='cardName'>{card.name}</p>
@@ -149,7 +161,11 @@ export default function Cardmenu(props: any) { // what to do with props?
                     {card.amount} {card.currencyName}
                   </p>
                   <div className='panBox'>
-                    <p id='cardId' className='cardPan' onClick={() => handlePanClick(i)}>
+                    <p
+                      id='cardId'
+                      className='cardPan'
+                      onClick={() => handlePanClick(i)}
+                    >
                       {card.pan}
                     </p>
                     <button

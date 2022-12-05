@@ -7,17 +7,18 @@ import { Currency } from "../models/interfaces";
 function App() {
   const [updateForm, setUpdateForm] = useState(true);
   const [id] = useState("62f3f90eff26bfc3d7624781");
-  const [listCurrency, setListCurrency] = useState<Currency>({
-    currency: [""],
-  });
+  const [listCurrency, setListCurrency] = useState<Currency>([]);
 
   useEffect(() => {
-    axios
-      .get(`api/currency`)
-      .then((res) => {
-        setListCurrency(res.data);
-      })
-      .catch((err) => console.log(err));
+    const getCurrency = async () => {
+      await axios
+        .get(`api/currency`)
+        .then((res) => {
+          setListCurrency(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+    getCurrency();
   }, []);
 
   return (
@@ -26,13 +27,13 @@ function App() {
         updateForm={updateForm}
         setUpdateForm={setUpdateForm}
         id={id}
-        listCurrency={listCurrency.currency}
+        listCurrency={listCurrency}
       />
       <Cardmenu
         updateForm={updateForm}
         setUpdateForm={setUpdateForm}
         id={id}
-        listCurrency={listCurrency.currency}
+        listCurrency={listCurrency}
       />
     </div>
   );
