@@ -29,7 +29,7 @@ export default function Cardmenu({
 
   useEffect(() => {
     axios
-      .get(`api/wallet/${id}`)
+      .get(`http://localhost:5000/api/wallet/${id}`)
       .then((res) => {
         setCards(res.data.cards);
         res.data.cards.map((card: Card, i: number) => {

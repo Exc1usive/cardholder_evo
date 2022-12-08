@@ -3,6 +3,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Cash, ModalAddCashProps } from "../models/interfaces";
+import { useAppSelector } from "../app/hooks";
 
 export default function ModalAddCash({
   listCurrency,
@@ -11,12 +12,13 @@ export default function ModalAddCash({
   setUpdateForm,
   id,
 }: ModalAddCashProps) {
-
   const [form, setForm] = useState<Cash>({
     amount: 0,
     currencyName: "",
     _id: "",
   });
+
+  const currencyList = useAppSelector((state) => state.currency.currencyList);
 
   // These methods will update the state properties all string
   function updateForm(value: Partial<Cash>) {
@@ -56,7 +58,7 @@ export default function ModalAddCash({
                 onChange={(e) => updateForm({ currencyName: e.target.value })}
                 className='form-control smallInput'
               >
-                {listCurrency.map((currency: string, index: number) => (
+                {currencyList.map((currency: string, index: number) => (
                   <option key={index} value={currency}>
                     {currency}
                   </option>
@@ -68,10 +70,7 @@ export default function ModalAddCash({
             <button onClick={onSubmit} className='btn btn-primary modalButton'>
               Зберегти
             </button>
-            <button
-              onClick={handleCloseAddCash}
-              className='btn btn-primary modalButton'
-            >
+            <button onClick={handleCloseAddCash} className='btn btn-primary modalButton'>
               Скасувати
             </button>
           </div>

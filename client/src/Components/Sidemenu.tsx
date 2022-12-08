@@ -50,7 +50,7 @@ export default function Sidemenu({
 
   useEffect(() => {
     axios
-      .get(`api/wallet/${id}`)
+      .get(`http://localhost:5000/api/wallet/${id}`)
       .then((res) => setWallet(res.data))
       .catch((err) => console.log(err));
   }, [id, updateForm]);
